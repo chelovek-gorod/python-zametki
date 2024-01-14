@@ -1,17 +1,21 @@
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLabel, QListWidget, QLineEdit, QTextEdit, QInputDialog, QHBoxLayout, QVBoxLayout, QFormLayout
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QLabel, QListWidget,\
+    QLineEdit, QTextEdit, QInputDialog, QHBoxLayout, QVBoxLayout, QFormLayout
 
 import json
 
 app = QApplication([])
 
-'''Интерфейс приложения'''
-#параметры окна приложения
+#
+#  Интерфейс приложения
+#
+
+# параметры окна приложения
 notes_win = QWidget()
 notes_win.setWindowTitle('Умные заметки')
 notes_win.resize(900, 600)
 
-#виджеты окна приложения
+# виджеты окна приложения
 list_notes = QListWidget()
 list_notes_label = QLabel('Список заметок')
 
@@ -28,7 +32,7 @@ button_tag_search = QPushButton('Искать заметки по тегу')
 list_tags = QListWidget()
 list_tags_label = QLabel('Список тегов')
 
-#расположение виджетов по лэйаутам
+# расположение виджетов по лэйаутам
 layout_notes = QHBoxLayout()
 col_1 = QVBoxLayout()
 col_1.addWidget(field_text)
@@ -64,7 +68,7 @@ notes_win.setLayout(layout_notes)
 #  Функционал приложения
 #
 
-'''Работа с текстом заметки'''
+# Работа с текстом заметки
 def add_note():
     note_name, ok = QInputDialog.getText(notes_win, "Добавить заметку", "Название заметки: ")
     if ok and note_name != "":
@@ -74,7 +78,7 @@ def add_note():
         print(notes) 
 
 def show_note():
-    #получаем текст из заметки с выделенным названием и отображаем его в поле редактирования
+    # получаем текст из заметки с выделенным названием и отображаем его в поле редактирования
     key = list_notes.selectedItems()[0].text()
     print(key)
     field_text.setText(notes[key]["текст"])
@@ -105,7 +109,7 @@ def del_note():
     else:
         print("Заметка для удаления не выбрана!")
 
-'''Работа с тегами заметки'''
+# Работа с тегами заметки
 def add_tag():
     if list_notes.selectedItems():
         key = list_notes.selectedItems()[0].text()
@@ -156,8 +160,7 @@ def search_tag():
     else:
         pass
     
-'''Запуск приложения'''
-#подключение обработки событий
+# подключение обработки событий
 button_note_create.clicked.connect(add_note)
 list_notes.itemClicked.connect(show_note)
 button_note_save.clicked.connect(save_note)
@@ -166,7 +169,7 @@ button_tag_add.clicked.connect(add_tag)
 button_tag_del.clicked.connect(del_tag)
 button_tag_search.clicked.connect(search_tag)
 
-#запуск приложения 
+# запуск приложения 
 notes_win.show()
 
 with open("notes_data.json", "r") as file:
